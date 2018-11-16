@@ -10,53 +10,42 @@ namespace NetWorkLib.Net
     public class version
     {
         httputil httputil = new httputil();
-    
-        public static bool judgeversion(string versionlocal)
+
+        public static bool judgeversion(string versionlocal, string appname)
         {
-            //flag为true,则需下载
-            bool flag = false;
-            String param = "zttoffice";
-            String url = "http://"+ MyGlobal.ip+":8080/ZttErp/zttCodeversionController/getversion?param=" + param;
+            bool result = false;
+            string url = "http://" + MyGlobal.ip + ":8080/ZttErp/zttCodeversionController/getversion?param=" + appname;
             httputil httputil = new httputil();
-            Hashtable ht = httputil.Httpwconnection(url, param);
-            if (ht["status"].Equals("fail"))
+            Hashtable hashtable = httputil.Httpwconnection(url, appname);
+            if (hashtable["status"].Equals("fail"))
             {
-                flag = false;
+                result = false;
             }
-            if (ht["status"].Equals("success"))
+            if (!hashtable["status"].Equals("success"))
             {
-                String content = ht["content"].ToString();
-                if (!content.Equals(versionlocal))
-                {
-                    return true;
-                }
-            }
-
-            else
-            {
-
                 return false;
             }
-            return flag;
-        }
-
-        public String getversion()
-        {
-            //flag为true,则需下载
-            String param = "zttoffice";
-
-            String url = "http://" + MyGlobal.ip + ":8080/ZttErp/zttCodeversionController/getversion?param=" + param;
-            httputil httputil = new httputil();
-            Hashtable ht = httputil.Httpwconnection(url, param);
-            String content = null;
-            if (ht["status"].Equals("success"))
+            string text = hashtable["content"].ToString();
+            if (text.Equals(versionlocal))
             {
-                content = ht["content"].ToString();
-
+                return result;
             }
-            return content;
+            return true;
         }
-       
+
+        public string getversion(string appname)
+        {
+            string url = "http://" + MyGlobal.ip + ":8080/ZttErp/zttCodeversionController/getversion?param=" + appname;
+            httputil httputil = new httputil();
+            Hashtable hashtable = httputil.Httpwconnection(url, appname);
+            string result = null;
+            if (hashtable["status"].Equals("success"))
+            {
+                result = hashtable["content"].ToString();
+            }
+            return result;
+        }
+
 
     }
 }

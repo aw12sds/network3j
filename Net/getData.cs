@@ -157,5 +157,19 @@ namespace NetWork.util
             string name = SQLHELP.ExecuteScalar(sql, CommandType.Text).ToString();
             return name;
         }
+        public static void sendsms(string phonenum,string message)
+        {
+            string appkey = "5DEDD10D2E434A139A05953BDB66CC68";
+            string sysName = "zttoffice";
+            string SenderType = "Site";
+            string SenderId = "zts";
+            string Remark = "";
+            string xml = "<DocumentElement><ShortMessages><PhoneNumber>"+ phonenum+"</PhoneNumber><Content>"+ message+"</Content><Success/></ShortMessages></DocumentElement>";
+            string errorCode = "1";
+            string errorMsg = "001";
+            NetWorkLib.ServiceReference1.SMSServiceClient client = new NetWorkLib.ServiceReference1.SMSServiceClient();
+            client.SendSMS(appkey, sysName, SenderType, SenderId, Remark, ref xml, ref errorCode, ref errorMsg);
+        }
+
     }
 }
